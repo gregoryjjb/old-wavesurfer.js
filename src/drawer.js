@@ -113,22 +113,30 @@ WaveSurfer.Drawer = {
     recenter: function (percent) {
         var position = this.wrapper.scrollWidth * percent;
         this.recenterOnPosition(position, true);
-    },
+	},
+	
+	setScroll: function (position) {
+		this.wrapper.scrollLeft = position;
+	},
 
     recenterOnPosition: function (position, immediate) {
         var scrollLeft = this.wrapper.scrollLeft;
         var half = ~~(this.wrapper.clientWidth / 2);
         var target = position - half;
         var offset = target - scrollLeft;
-        var maxScroll = this.wrapper.scrollWidth - this.wrapper.clientWidth;
-
+		var maxScroll = this.wrapper.scrollWidth - this.wrapper.clientWidth;
+		
+		console.log("Recentering on position");
+		
         if (maxScroll == 0) {
-            // no need to continue if scrollbar is not there
+			// no need to continue if scrollbar is not there
+			console.log("MaxScroll = 0");
             return;
         }
 
         // if the cursor is currently visible...
         if (!immediate && -half <= offset && offset < half) {
+			console.log("Cursor visible");
             // we'll limit the "re-center" rate.
             var rate = 5;
             offset = Math.max(-rate, Math.min(rate, offset));
@@ -136,10 +144,13 @@ WaveSurfer.Drawer = {
         }
 
         // limit target to valid range (0 to maxScroll)
-        target = Math.max(0, Math.min(maxScroll, target));
+		target = Math.max(0, Math.min(maxScroll, target));
+		console.log("Target:", target);
+		console.log("ScrollLeft:", scrollLeft);
         // no use attempting to scroll if we're not moving
         if (target != scrollLeft) {
-            this.wrapper.scrollLeft = target;
+			this.wrapper.scrollLeft = target;
+			console.log("Should have updated");
         }
 
     },

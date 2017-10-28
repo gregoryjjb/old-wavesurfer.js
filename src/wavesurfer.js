@@ -147,7 +147,12 @@ var WaveSurfer = {
             this.peakCache = Object.create(WaveSurfer.PeakCache);
             this.peakCache.init();
         }
-    },
+	},
+	
+	setScroll: function(position) {
+		//this.drawer.recenterOnPosition(position, true);
+		this.drawer.setScroll(position);
+	},
 
     getDuration: function () {
         return this.backend.getDuration();
@@ -349,9 +354,11 @@ var WaveSurfer = {
         this.drawBuffer();
         this.drawer.progress(this.backend.getPlayedPercents());
 
-        this.drawer.recenter(
-            this.getCurrentTime() / this.getDuration()
-        );
+		if (this.params.autoCenter) {
+			this.drawer.recenter(
+				this.getCurrentTime() / this.getDuration()
+			);
+		}
         this.fireEvent('zoom', pxPerSec);
     },
 
